@@ -31,7 +31,7 @@ class Commentaire
      /**
      * @var \DateTime
      *
-     * @ORM\Column(name="dat", type="datetime")
+     * @ORM\Column(name="date", type="datetime")
      */
     private $date;
 
@@ -169,6 +169,11 @@ class Commentaire
     public function getIdMembre()
     {
         return $this->idMembre;
+    }
+
+    public function __construct()
+    {
+        $this->date = new \DateTime('now');
     }
 
 

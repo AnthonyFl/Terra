@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 
 
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @ORM\Table(name="membre")
  * @ORM\Entity(repositoryClass="App\Repository\MembreRepository")
  */
-class Membre
+class Membre implements UserInterface, \Serializable
 {
     /**
      * @var int
@@ -101,9 +101,11 @@ class Membre
     //private $salt;
 
     /**
-     * @ORM\Column(name="role", type="string")
+     * @var array
+     *
+     * @ORM\Column(type="string")
      */
-    private $role;
+    private $role = [];
 
     /**
      * Set id
@@ -371,9 +373,13 @@ class Membre
     
     public function getRoles(){
         return [$this -> role];
+
+        // Afin d'être sûr qu'un user a toujours au moins 1 rôle
+        if (empty($role)) {
+            $role[] = 'ROLE_USER';
+        }
     }
     
-
     public function getRole(){
         return $this -> role;
     }
@@ -383,10 +389,36 @@ class Membre
         return $this;
     }
 
+     /**
+     * Retour le salt qui a servi à coder le mot de passe
+     *
+     * {@inheritdoc}
+     */
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+ 
+
     /**
      * @inheritDoc
      */
     public function eraseCredentials(){
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize(): string
+    {
+        return serialize([$this->id, $this->username, $this->password]);
+    }
+ 
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized): void
+    {
+        [$this->id, $this->username, $this->password] = unserialize($serialized, ['allowed_classes' => false]);
     }
 }

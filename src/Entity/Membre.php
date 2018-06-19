@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Security\Core\User\UserInterface;
+
 
 
 /**
@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Table(name="membre")
  * @ORM\Entity(repositoryClass="App\Repository\MembreRepository")
  */
-class Membre implements UserInterface
+class Membre
 {
     /**
      * @var int
@@ -90,16 +90,6 @@ class Membre implements UserInterface
 
     /**
      * @var string
-     * 
-     * @ORM\Column(name="avatar", type="string", length=255)
-     */
-    private $avatar;
-
-    // Pas besoin de le mapper
-    private $file;
-
-    /**
-     * @var string
      *
      * @ORM\Column(name="description", type="text")
      */
@@ -108,7 +98,7 @@ class Membre implements UserInterface
     /**
      * @ORM\Column(name="salt", type="string", length=255)
      */
-    private $salt;
+    //private $salt;
 
     /**
      * @ORM\Column(name="role", type="string")
@@ -355,63 +345,6 @@ class Membre implements UserInterface
         return $this->adresse;
     }
 
-    /**
-     * Set avatar
-     *
-     * @param string $avatar
-     *
-     * @return Membre
-     */
-    public function setAvatar($avatar)
-    {
-        $this->avatar = $avatar;
-
-        return $this;
-    }
-
-    /**
-     * Get avatar
-     *
-     * @return string
-     */
-    public function getAvatar()
-    {
-        return $this->avatar;
-    }
-
-    // Getter et Setter de File de notre objet Avatar uploadé
-    public function getFile(){
-        return $this->file;
-    }
-
-    public function setFile(UploadedFile $file = NULL){
-        $this -> file = $file;
-
-        return $this;
-    }
-
-    public function chargementAvatar(){
-        if(!$this -> file){
-            return;
-        }
-
-        $nom_avatar = $this -> file -> getClientOriginalName(); // On récupère le nom original de l'avatar
-
-        $new_nom_avatar = $this -> renameFile($nom_avatar);
-
-        $this -> avatar = $new_nom_avatar;
-
-        $this -> file -> move($this -> avatarDir(), $new_nom_avatar); //avatarDir() est notre fonction qui retourne le chemin des avatars et $new_nom_avatar est le nom de l'avatar enregistré en BDD
-    }
-
-    public function avatarDir(){
-        return __DIR__ . '/../../../web/avatar';
-    }
-
-    public function renameFile($name){
-        return 'avatar_' . time() . '_' . rand(1, 9999) . '_' . $name;
-    }
-
      /**
      * Set description
      *
@@ -434,29 +367,6 @@ class Membre implements UserInterface
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * Set salt
-     *
-     * @param string $salt
-     *
-     * @return Membre
-     */
-    public function setSalt($salt)
-    {
-        $this -> salt = $salt;
-        return $this;
-    }
-
-    /**
-     * Get salt
-     * 
-     * @return string
-     */
-    public function getSalt()
-    {
-        return $this -> salt;
     }
     
     public function getRoles(){

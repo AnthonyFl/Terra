@@ -131,9 +131,6 @@ class MembreType extends AbstractType
                     ))
                 )
             ))
-            ->add('file', FileType::class, array(
-                'required' => false
-            ))
             ->add('description', TextareaType::class, array(
                 'required' => false
             ))

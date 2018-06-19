@@ -1,0 +1,41 @@
+{%  extends 'layout.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+		<div class="row row-offcanvas row-offcanvas-right">
+			{% for msg in app.session.flashbag.get('success') %}
+			<span class="alert alert-success">{{ msg }}</span>
+			{% endfor %}
+
+			{% for msg in app.session.flashbag.get('fail') %}
+			<span class="alert alert-danger">{{ msg }}</span>
+			{% endfor %}
+
+		  <div class="col-xs-6 col-sm-12 col-12 sidebar-offcanvas" id="sidebar">
+
+				<table class="table">
+					<tr>
+						<th colspan="2">Point d'intérêt</th>
+                        <th>Catégorie</th>
+						<th>Région</th>
+						<th>Pays</th>                        
+						<th colspan="2">Action</th>
+					</tr>
+				{% for poi in pois %}
+					<tr>
+						<td>Id n° {{ poi.id }}</td>
+						<td>{{ poi.categorie }}</td>
+                        <td>{{ poi.region }}</td>
+						<td>{{ poi.pays }}</td>
+						<td><a href="{{ path('deletePoi', {'id' : poi.id }) }}"><i class="glyphicon glyphicon-trash"></i></a></td>
+						<td><a href="{{ path('updatePoi', {'id' : poi.id }) }}"><i class="glyphicon glyphicon-pencil"></i></a></td>
+					</tr>
+				{% endfor %}	
+				</table>
+				<a href="{{ path('createPoi') }}" class="btn btn-primary">Ajouter un Point d'intérêt</a>
+		  </div>
+		  <!--/.col-xs-12.col-sm-9-->
+		</div>
+		<!--/row-->
+{% endblock %}

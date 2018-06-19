@@ -1,0 +1,19 @@
+{%  extends 'layout.html.twig' %}
+
+{% block title %}{% endblock %}
+
+
+
+{% block content %}
+		<div class="row row-offcanvas row-offcanvas-right">
+		  <div class="col-xs-6 col-sm-12 col-12 sidebar-offcanvas" id="sidebar">
+
+			<h1>{{ title }}</h1>
+			
+			{{ form(poiForm) }}
+
+		  </div>
+		  <!--/.col-xs-12.col-sm-9-->
+		</div>
+		<!--/row-->
+{% endblock %}

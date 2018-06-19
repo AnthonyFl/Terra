@@ -6,6 +6,8 @@ use App\Entity\Poi;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use App\Form\PoiType;
 
 class PoiController extends Controller
 {
@@ -18,48 +20,40 @@ class PoiController extends Controller
         $repository = $this -> getDoctrine() -> getRepository(Poi::class);
         $pois = $repository -> findAll();
 
-        
         // Un peu de SQL :)
         $em = $this -> getDoctrine() -> getManager();
         $query = $em -> createQuery("SELECT DISTINCT p.categorie FROM App\Entity\Poi p");
         $categories = $query -> getResult();
-        
-        
+             
         $params = array(
             'pois' => $pois,
-            'categories' => $categories,
-            'Lieu' => 'Lieu'
+            'categories' => $categories
         );
 
        return $this->render('Poi/terra.html.twig', $params);
     }
 
     /**
-     * www.monsite.com/terra/lieu
+     * www.monsite.com
+     * www.monsite.com/terra/
      * @Route("/terra/{categorie}", name="terra")
      */
     public function terraAction($categorie)
     {
         $repository =$this -> getDoctrine() -> getRepository(Poi::class);
         $pois = $repository -> findBy(['categorie'=>$categorie]);
-
         
         // un peu de SQL
         $em = $this -> getDoctrine() -> getManager();
         $query = $em -> createQuery(" SELECT DISTINCT p.categorie FROM TerraBundle\Entity\Poi p");
         $categories = $query -> getResult();
         
-
         $params = array(
             "pois" => $pois,
-            "categories" => $categories,
-            "lieu" => 'Pois : ' . $categorie
+            "categories" => $categories
         );
-
-
         return $this->render('Poi/terra.html.twig', $params);
     }
-                        
 
     /**
     * www.terra.dev/poi/5
@@ -73,47 +67,41 @@ class PoiController extends Controller
 
         if(!is_null($poi)){
             $params = array(
-                'poi'=>$poi,
-                'lieu' => $poi->getLieu()
+                'poi'=>$poi                
             );
             return $this -> render('Poi/poi.html.twig', $params);
         }
         else{
             return new Response('Le point d\'intérêt n\'existe pas !');
         }
-    
     }
 
     /**
-    * @Route("/register")
+    * @Route("/register", name="register")
     * 
     */
 
- public function registerPoiAction()
+ public function registerPoiAction(Request $request)
     {
         $poi = new Poi;
-        $poi 
-            -> setPoi('poitest')
-            -> setLieu('Lac de Mingchi')
-            -> setDescription('Yilan est une ville de Taïwan, capitale du comté de Yilan.')
-            -> setPhoto('photo.jpg')
-            -> setCategorie('rouge')
-            -> setAdresse('No.1, Mingchishanzhuang, canton de Datong, comté de Yilan Taiwan, R.O.C.
-            ')
-            -> setVille('Yilan city')
-            -> setRegion('Yilan')
-            -> setPays('Taïwan');
+        $form = $this -> createForm(PoiType::class, $poi);
 
-        // On récupère l'entityManager
-        $em = $this -> getDoctrine() -> getManager();
+        if($request -> isMethod('POST') && $form -> handleRequest($request) -> isValid())
+        {
+            $em = $this -> getDoctrine() -> getManager();
+            $em -> persist($poi);
+            $em -> flush();
 
-        // On prépare l'insertion des BDD : On l'enregistreraen BDD au prochain appel de la fonction flush().
-        $em -> persist($poi);
+            $request -> getSession() -> getFlashBag() -> add('succes', 'Le point d\'intérêt a bien été enregistré !');
 
-        // On enregistre !!
-        $em -> flush();
+            return $this -> redirectToRoute('register');
 
-        return new Response("OK pour l'enregistrement");
+    }
+    $formView = $form -> createView();
+
+    $params = array('poiForm' => $formView, 'title' => 'Ajout de Point d \'intérêt');
+
+    return $this -> render ('Poi/form.html.twig', $params);
     }
 
     /**
@@ -125,8 +113,6 @@ class PoiController extends Controller
         $em = $this -> getDoctrine() -> getManager();
 
         $poi = $em -> find(Poi::class, $id);
-        $poi -> setLieu('Yilan');
-
         $em -> flush();
 
         return new Response("OK pour la modification");

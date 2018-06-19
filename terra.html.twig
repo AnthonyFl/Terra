@@ -3,7 +3,7 @@
 {% block title %} {% endblock %}
 
 {% block content %}
-  
+ 
 		<div class="row row-offcanvas row-offcanvas-right">
 		  <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
 			<div class="list-group">
@@ -17,7 +17,6 @@
 		  <!--/.sidebar-offcanvas-->
 		  <div class="col-xs-12 col-sm-9">
 			<p class="pull-right visible-xs">
-			  <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
 			</p>
 			<div class="jumbotron">
 			  <h1>Bienvenue sur Terra</h1>
@@ -25,11 +24,10 @@
 			</div>
 				
 		{% for poi in pois %}
-			<!-- afficher pour chaque poi : la photo, le prix et un lien permettant d'envoyer vers la fichie poi -->
+			<!-- afficher pour chaque poi : la photo et un lien permettant d'envoyer vers la fiche poi -->
 			<!--<div class="row"> -->
 			  <div class="col-xs-6 col-lg-4">
 			  <div class="panel-default border">
-				<div class="panel-heading text-center"><h2>{{ poi.titre }}</h2></div>
 				<p><a href="{{path('poi', {'id' : poi.id } )}}">	
 				<img src="{{ asset('/photo/'~ poi.photo) }}" alt="" class="img-responsive">				
 			  </div>

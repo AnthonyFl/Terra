@@ -71,11 +71,42 @@ class SecurityController extends Controller
         ]);
     }
 
-
     /**
      * @Route("/deconnexion", name="deconnexion")
      */
     public function deconnexionAction(){
         
+    }
+
+    /**
+     * @Route("/profil/update/{id}", name="updateProfil")
+     */
+    public function updateProfilAction($id, Request $request){
+        $em = $this -> getDoctrine() -> getManager();
+        $membre = $em -> find(Membre::class, $id);
+        
+        $form = $this -> createForm(MembreType::class, $membre);
+
+        if($request -> isMethod('POST')){
+            $form -> handleRequest($request); // A partir de MAINTENANT notre objet $membre contient les infos postées dans le formulaire == HYDRATATION
+
+            if($form -> isValid()){
+                $em = $this -> getDoctrine() -> getManager();
+                $em -> persist($membre);
+                $em -> flush();
+
+                $request -> getSession() -> getFlashBag() -> add('success', 'Félicitations, vous avez modifier votre profil !' );
+                return $this -> redirectToRoute('profil');
+            }
+        }
+
+        $formView = $form -> createView();
+
+        $params = array(
+            'membreForm' => $formView,
+            'title' => "Modification du profil"
+        );
+
+        return $this->render('/membre/update.html.twig', $params);
     }
 }

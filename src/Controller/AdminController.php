@@ -26,7 +26,7 @@ class AdminController extends Controller
             'title' => "Gestion des Points d'intérêt"
         );
 
-        return $this->render('admin/poi/show.html.twig', $params);
+        return $this->render('admin/poi/showPoi.html.twig', $params);
     }
 
     /**
@@ -67,7 +67,7 @@ class AdminController extends Controller
             'title' => "Ajout de point d'intérêt"
         );
 
-        return $this->render('admin/poi/create.html.twig', $params);
+        return $this->render('admin/poi/createPoi.html.twig', $params);
     }
 
     /**
@@ -100,7 +100,7 @@ class AdminController extends Controller
         );
 
 
-        return $this->render('admin/poi/create.html.twig', $params);
+        return $this->render('admin/poi/createPoi.html.twig', $params);
     }
 
     // ======================= MEMBRES ============================

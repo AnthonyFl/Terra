@@ -6,17 +6,18 @@
 
 <div class="form-group">
 
-<div class="col-md-6 col-md-offset-3">
+<div class="col-md-offset-12">
 	<div class="panel-default border">
 		<div class="panel-heading text-center"><h2>{{ poi.poi}}</h2></div>
 		<div class="panel-body">
-			<img src="<?= $url ?>photo/<?= $poi -> getPhoto() ?>" alt="" class="img-responsive"><hr>
+			
 			<p class="text-center">Description : {{ poi.description }}</p>
 			<p class="text-center">Catégorie : {{ poi.categorie }}</p>
-			<p class="text-center">Adresse : {{ poi.adresse }}></p>
+			<p class="text-center">Adresse : {{ poi.adresse }}</p>
 			<p class="text-center">Ville : {{ poi.ville }}</p>
 			<p class="text-center">Région : {{ poi.region }}</p>
 			<p class="text-center">Pays : {{ poi.pays }}</p><hr>
+			<p><img src="{{ asset('/photo/' ~ poi.photo) }}"></p>
 			
 		<form method="post" action="Poi.php">
 			<input type="hidden" name="id_poi" value="<?= $poi -> getId_poi() ?>">
@@ -26,8 +27,7 @@
 			<option>Lac de Mingchi</option>
 			<option>Canyon de Wutou</option>
 			</select><br>
-		</form>
-				
+		</form>	
 		</div>
 	</div>
 </div>

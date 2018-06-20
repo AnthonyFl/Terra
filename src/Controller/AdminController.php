@@ -196,5 +196,4 @@ class AdminController extends Controller
 
         return $this->render('admin/membre/create.html.twig', $params);
     }
-
 }

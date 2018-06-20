@@ -175,6 +175,4 @@ class Commentaire
     {
         $this->date = new \DateTime('now');
     }
-
-
 }

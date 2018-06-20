@@ -56,7 +56,7 @@ class PoiController extends Controller
     }
 
     /**
-    * www.terra.dev/poi/5
+    * 
     * @Route("/poi/{id}", name="poi")
     * 
     */
@@ -88,6 +88,7 @@ class PoiController extends Controller
 
         if($request -> isMethod('POST') && $form -> handleRequest($request) -> isValid())
         {
+            $poi -> chargementPhoto();
             $em = $this -> getDoctrine() -> getManager();
             $em -> persist($poi);
             $em -> flush();

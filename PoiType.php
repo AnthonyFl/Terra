@@ -23,16 +23,19 @@ class PoiType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('id', TextType::class)
         ->add('POI', TextType::class)
-        ->add('lieu', TextType::class)
         ->add('description', TextareaType::class)
-        ->add('categorie', TextType::class)
-        ->add('file', FileType::class, array('required' => false))
+        ->add('categorie', ChoiceType::class, array(
+            'choices' => array(
+                'Lac' => 'Lac',
+                'Montagne' => 'Montagne',
+                'Forêt' => 'Forêt'
+        )))
         ->add('adresse', TextareaType::class)
-        ->add('ville', TextareaType::class)
-        ->add('region', TextareaType::class)
-        ->add('pays', TextareaType::class)
+        ->add('ville', TextType::class)
+        ->add('region', TextType::class)
+        ->add('pays', TextType::class)
+        ->add('file', FileType::class, array('required' => false))
         ->add('enregistrer', SubmitType::class);
     }
     

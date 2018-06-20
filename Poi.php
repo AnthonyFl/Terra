@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Poi
@@ -81,6 +81,14 @@ class Poi
     {
         return $this->id;
     }
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="photo", type="string", length=300)
+     */
+    private $photo;
+    private $file;
+
 
     /**
      * Set poi
@@ -276,4 +284,63 @@ class Poi
         return $this->pays;
     }
 
+    /**
+     * Set photo
+     *
+     * @param string $photo
+     *
+     * @return Produit
+     */
+    public function setPhoto($photo)
+    {
+        $this->photo = $photo;
+
+        return $this;
+    }
+
+    /**
+     * Get photo
+     *
+     * @return string
+     */
+    public function getPhoto()
+    {
+        return $this->photo;
+    }
+    public function getFile()
+    {
+        return $this -> file;
+    }
+
+    public function setFile(UploadedFile $file){
+        $this -> file  = $file;
+
+        return $this;
+    }
+
+    public function chargementPhoto()
+    {
+        if(!$this -> file)
+        {
+            return;
+        }
+
+        $nom_photo = $this -> file -> getClientOriginalName();
+        // On récupère le nom original de la photo ($_FILES['photo']['name'])
+        $new_nom_photo = $this -> renameFile($nom_photo);
+
+        $this -> photo = $new_nom_photo;
+
+        $this -> file -> move($this -> photoDir(),$new_nom_photo);
+        // photoDir() est notre fonction qui retourne le chemin des photos, et$new_nom_photo est le nom de la photo enregistrée en BDD.
+    }
+
+    public function photoDir(){
+        return __DIR__ . '/../../../web/photo';
+    }
+
+    public function renameFile($name){
+        return 'photo_' . time() . '_' . rand(1,9999) . '_' . $name;
+        // return 'photo_1500000000_7548_thirt.jpg'
+    }
 }

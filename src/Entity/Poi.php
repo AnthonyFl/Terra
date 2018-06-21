@@ -306,7 +306,7 @@ class Poi
         return $this -> file;
     }
 
-    public function setFile(UploadedFile $file){
+    public function setFile(UploadedFile $file = NULL){
         $this -> file  = $file;
 
         return $this;
@@ -329,7 +329,7 @@ class Poi
     }
     
     public function photoDir(){
-        return __DIR__ . '/../../../web/photo';
+        return __DIR__ . '/../../public/photo';
     }
     public function renameFile($name){
         return 'photo_' . time() . '_' . rand(1,9999) . '_' . $name;
